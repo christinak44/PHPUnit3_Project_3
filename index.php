@@ -18,10 +18,18 @@
             <div class="container">
                 <div class="entry-list">
                     <article>
-                        <h2><a href="detail.html">The best day I’ve ever had</a></h2>
-                        <time datetime="2016-01-31">January 31, 2016</time>
+                        <?php
+                        include "inc/functions.php";
+                        foreach (get_entries_list() as $item) {
+                          echo "<h2><a href='/detail.php?id=" . $item['id'] . "'>" . $item['title'] . "</a></h2>";
+                          echo "<time>" . date('F jS,Y',strtotime($item['date'])) . "</time>";
+                        }
+
+                         ?>
+                        <!--<h2><a href="detail.html">The best day I’ve ever had</a></h2>
+                        <time datetime="2016-01-31">January 31, 2016</time>-->
                     </article>
-                    <article>
+                    <!--<article>
                         <h2><a href="detail_2.html">The absolute worst day I’ve ever had</a></h2>
                         <time datetime="2016-01-31">January 31, 2016</time>
                     </article>
@@ -32,12 +40,12 @@
                     <article>
                         <h2><a href="detail_4.html">Dude, where’s my car?</a></h2>
                         <time datetime="2016-01-31">January 31, 2016</time>
-                    </article>
+                    </article>-->
                 </div>
             </div>
         </section>
         <?php
           include 'inc/footer.php';
-        ?>  
+        ?>
     </body>
 </html>

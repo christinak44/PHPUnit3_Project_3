@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html>
     <head>
         <meta charset="utf-8">
@@ -23,7 +23,14 @@
             <div class="container">
                 <div class="entry-list single">
                     <article>
-                        <h1>The best day I’ve ever had</h1>
+                    <?php
+                    include "inc/functions.php";
+
+                      echo "<h1>" . $results['title'] . "</h1>";
+                      echo "<time>" . date('F jS,Y',strtotime($date)) . "</time>";
+
+                    ?>
+                      <!--  <h1>The best day I’ve ever had</h1>
                         <time datetime="2016-01-31">January 31, 2016</time>
                         <div class="entry">
                             <h3>Time Spent: </h3>
@@ -47,7 +54,7 @@
                 </div>
             </div>
             <div class="edit">
-                <p><a href="edit.html">Edit Entry</a></p>
+                <p><a href="edit.php">Edit Entry</a></p>
             </div>
         </section>
         <footer>
