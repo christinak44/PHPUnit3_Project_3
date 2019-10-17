@@ -21,10 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             echo 'Could not add entry';
          }
-    }     
+    }
 
 }
-include 'inc/header.php'; ?>
+include 'inc/header.php';
+?>
 
 <!DOCTYPE html>
 <html>
@@ -54,6 +55,11 @@ include 'inc/header.php'; ?>
                         <textarea id="what-i-learned" rows="5" name="whatILearned"></textarea>
                         <label for="resources-to-remember">Resources to Remember</label>
                         <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember"></textarea>
+                        <?php
+                        if (!empty($id)){
+                             echo '<input type="hidden" name="id" value="' .$id . '" />';
+                        }
+                        ?>
                         <input type="submit" value="Publish Entry" class="button">
                         <a href="index.php" class="button button-secondary">Cancel</a>
                     </form>
