@@ -1,4 +1,9 @@
+<?php
+require 'inc/functions.php';
+$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+$entry = get_detail_page($id);
 
+include 'inc/header.php'; ?>
 <html>
     <head>
         <meta charset="utf-8">
@@ -9,37 +14,34 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/site.css">
-    </head>
-    <body>
-        <header>
+
             <div class="container">
-                <div class="site-header">
+              <!--  <div class="site-header">
                     <a class="logo" href="index.html"><i class="material-icons">library_books</i></a>
                     <a class="button icon-right" href="new.html"><span>New Entry</span> <i class="material-icons">add</i></a>
-                </div>
+                </div>-->
             </div>
-        </header>
+
         <section>
             <div class="container">
                 <div class="entry-list single">
                     <article>
-                    <?php
-                    include "inc/functions.php";
 
-                      echo "<h1>" . $results['title'] . "</h1>";
-                      echo "<time>" . date('F jS,Y',strtotime($date)) . "</time>";
+                      <h1><?php echo $entry['title']; ?></h1>
+                      <time><?php echo date('F jS,Y',strtotime($entry['date'])); ?></time>
 
-                    ?>
-                      <!--  <h1>The best day I’ve ever had</h1>
+
+                      <!--<h1>The best day I’ve ever had</h1>
                         <time datetime="2016-01-31">January 31, 2016</time>
                         <div class="entry">
                             <h3>Time Spent: </h3>
                             <p>15 Hours</p>
                         </div>
-                        <div class="entry">
-                            <h3>What I Learned:</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut rhoncus felis, vel tincidunt neque.</p>
-                            <p>Cras egestas ac ipsum in posuere. Fusce suscipit, libero id malesuada placerat, orci velit semper metus, quis pulvinar sem nunc vel augue. In ornare tempor metus, sit amet congue justo porta et. Etiam pretium, sapien non fermentum consequat, <a href="">dolor augue</a> gravida lacus, non accumsan. Vestibulum ut metus eleifend, malesuada nisl at, scelerisque sapien.</p>
+                        <div class="entry">-->
+                            <h3 style= "text-align:left;">Time Spent:<?php echo "<time> " . $entry['time_spent'] . "</time>"; ?></h3>
+                            <h3 style= "text-align:left;">What I Learned:</h3>
+                            <p class="entry"><?php echo $entry['learned']; ?></p>
+
                         </div>
                         <div class="entry">
                             <h3>Resources to Remember:</h3>
@@ -49,7 +51,7 @@
                                 <li>Nunc ut rhoncus felis, vel tincidunt neque</li>
                                 <li><a href="">Ipsum dolor sit amet</a></li>
                             </ul>
-                        </div>
+                        </div>-->
                     </article>
                 </div>
             </div>

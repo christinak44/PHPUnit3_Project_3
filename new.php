@@ -1,3 +1,31 @@
+
+<?php
+require 'inc/functions.php';
+$Page = 'New Entry';
+$title = $date = $time_spent = $learned = $resources = '';
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
+    $date = trim(filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING));
+    $time_spent = trim(filter_input(INPUT_POST, 'Time Spent', FILTER_SANITIZE_INT));
+    $learned = trim(filter_input(INPUT_POST, 'What I learned', FILTER_SANITIZE_STRING));
+    $resources = trim(filter_input(INPUT_POST, 'Resources to Remember', FILTER_SANITIZE_STRING));
+
+        if(empty($title) || empty($date) || empty($time_spent) || empty($learned) || empty($resources)){
+           $error_message = 'Please enter the required fields: Title, Date, Time Spent, Learned, Resources';
+        } else {
+          if (add_entry($title, $date, $time_spent, $learned, $resources)) {
+            header('Location: index.php');
+            exit;
+        } else {
+            echo 'Could not add entry';
+         }
+    }     
+
+}
+include 'inc/header.php'; ?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -11,14 +39,6 @@
         <link rel="stylesheet" href="css/site.css">
     </head>
     <body>
-        <header>
-            <div class="container">
-                <div class="site-header">
-                    <a class="logo" href="index.html"><i class="material-icons">library_books</i></a>
-                    <a class="button icon-right" href="new.html"><span>New Entry</span> <i class="material-icons">add</i></a>
-                </div>
-            </div>
-        </header>
         <section>
             <div class="container">
                 <div class="new-entry">
@@ -35,15 +55,11 @@
                         <label for="resources-to-remember">Resources to Remember</label>
                         <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember"></textarea>
                         <input type="submit" value="Publish Entry" class="button">
-                        <a href="#" class="button button-secondary">Cancel</a>
+                        <a href="index.php" class="button button-secondary">Cancel</a>
                     </form>
                 </div>
             </div>
         </section>
-        <footer>
-            <div>
-                &copy; MyJournal
-            </div>
-        </footer>
+        <?php include 'inc/footer.php'; ?>
     </body>
 </html>
