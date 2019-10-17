@@ -8,12 +8,12 @@ $title = $date = $time_spent = $learned = $resources = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
     $date = trim(filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING));
-    $time_spent = trim(filter_input(INPUT_POST, 'time_spent', FILTER_SANITIZE_INT));
-    $learned = trim(filter_input(INPUT_POST, 'learned', FILTER_SANITIZE_STRING));
-    $resources = trim(filter_input(INPUT_POST, 'resources', FILTER_SANITIZE_STRING));
+    $time_spent = trim(filter_input(INPUT_POST, 'timeSpent', FILTER_SANITIZE_INT));
+    $learned = trim(filter_input(INPUT_POST, 'whatILearned', FILTER_SANITIZE_STRING));
+    $resources = trim(filter_input(INPUT_POST, 'ResourcesToRemember', FILTER_SANITIZE_STRING));
 
         if(empty($title) || empty($date) || empty($time_spent) || empty($learned) || empty($resources)){
-           $error_message = 'Please enter the required fields: Title, Date, Time Spent, Learned, Resources';
+           echo $error_message = 'Please enter the required fields: Title, Date, Time Spent, Learned, Resources';
         } else {
           if (add_entry($title, $date, $time_spent, $learned, $resources)) {
             header('Location: index.php');
