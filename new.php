@@ -1,16 +1,16 @@
 
 <?php
 require 'inc/functions.php';
-$Page = 'New Entry';
+$page = 'New Entry';
 $title = $date = $time_spent = $learned = $resources = '';
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
     $date = trim(filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING));
-    $time_spent = trim(filter_input(INPUT_POST, 'Time Spent', FILTER_SANITIZE_INT));
-    $learned = trim(filter_input(INPUT_POST, 'What I learned', FILTER_SANITIZE_STRING));
-    $resources = trim(filter_input(INPUT_POST, 'Resources to Remember', FILTER_SANITIZE_STRING));
+    $time_spent = trim(filter_input(INPUT_POST, 'time_spent', FILTER_SANITIZE_INT));
+    $learned = trim(filter_input(INPUT_POST, 'learned', FILTER_SANITIZE_STRING));
+    $resources = trim(filter_input(INPUT_POST, 'resources', FILTER_SANITIZE_STRING));
 
         if(empty($title) || empty($date) || empty($time_spent) || empty($learned) || empty($resources)){
            $error_message = 'Please enter the required fields: Title, Date, Time Spent, Learned, Resources';
@@ -44,7 +44,7 @@ include 'inc/header.php';
             <div class="container">
                 <div class="new-entry">
                     <h2>New Entry</h2>
-                    <form>
+                    <form class="form-container form-add" method="post" action="new.php">
                         <label for="title"> Title</label>
                         <input id="title" type="text" name="title"><br>
                         <label for="date">Date</label>
