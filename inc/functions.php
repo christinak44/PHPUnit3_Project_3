@@ -36,9 +36,9 @@ function add_entry($title, $date, $time_spent, $learned, $resources, $id = null)
 
  if ($id) {
      $sql = 'UPDATE entries SET title = ?, date = ?, time_spent = ?, learned = ?, resources = ? WHERE id = ?';
- } else {
+   } else {
    $sql = 'INSERT INTO entries (title, date, time_spent, learned, resources) VALUES (?, ?, ?, ?, ?)';
-
+   }
   try {
       $results = $db->prepare($sql);
       $results->bindValue(1, $title, PDO::PARAM_STR);
@@ -56,6 +56,19 @@ function add_entry($title, $date, $time_spent, $learned, $resources, $id = null)
       return false;
     }
   return true;
-  }
+
+}
+function delete_entry($id) {
+    include 'connection.php';
+    $sql = 'DELETE FROM entries WHERE id = ?';
+    try {
+        $results = $db->prepare($sql);
+        $results->bindValue(1, $id, PDO::PARAM_INT);
+        $results->execute();
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage() . "<br>";
+        return false;
+    }
+    return true;
 }
  ?>

@@ -56,13 +56,10 @@ include 'inc/header.php'; ?>
                 </div>
             </div>
             <div class="edit">
-                <p><a href="edit.php">Edit Entry</a></p>
+                <p><a href="edit.php?id=<?php echo $id; ?>">Edit Entry</a></p>
             </div>
         </section>
-        <footer>
-            <div>
-                &copy; MyJournal
-            </div>
+        <?php include 'inc/footer.php'; ?>
         </footer>
     </body>
 </html>

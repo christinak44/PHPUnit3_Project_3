@@ -9,20 +9,38 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/site.css">
+        <style>
+         body:after {
+        content: "";
+	background-image: url("css/images/miranda_by_mizaeltengu_db46m2q-fullview.jpg");
+        background-repeat:no-repeat;
+        background-position:center;
+        background-attachment:fixed;
+        background-size: auto auto;
+        opacity: 0.5;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        position: absolute;
+        z-index: -1;
+}
+</style>
     </head>
     <body>
       <?php
           include 'inc/header.php';
       ?>
         <section>
-            <div class="container">
+            <div class"container">
                 <div class="entry-list">
-                    <article>
+                    <article class="container">
                         <?php
                         include "inc/functions.php";
                         foreach (get_entries_list() as $item) {
                           echo "<h2><a href='/detail.php?id=" . $item['id'] . "'>" . $item['title'] . "</a></h2>";
                           echo "<time>" . date('F jS,Y',strtotime($item['date'])) . "</time>";
+                          echo "<input type='submit' value='Delete' />\n";
                         }
 
                          ?>
