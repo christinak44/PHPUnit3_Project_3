@@ -17,7 +17,7 @@
         background-position:center;
         background-attachment:fixed;
         background-size: auto auto;
-        opacity: 0.5;
+        opacity: 0.25;
         top: 0;
         left: 0;
         bottom: 0;
@@ -33,14 +33,15 @@
       ?>
         <section>
             <div class"container">
-                <div class="entry-list">
-                    <article class="container">
+                <div class="entry-list" style = "border:5px solid black;">
+                    <article>
                         <?php
                         include "inc/functions.php";
                         foreach (get_entries_list() as $item) {
                           echo "<h2><a href='/detail.php?id=" . $item['id'] . "'>" . $item['title'] . "</a></h2>";
                           echo "<time>" . date('F jS,Y',strtotime($item['date'])) . "</time>";
-                          echo "<input type='submit' value='Delete' />\n";
+                          echo "<p><a href='remove_entry.php?id=<?php echo $id; ?>' style='color:#f5671b'>Delete</a></p>";
+                          //echo "<input type='submit' value='Delete' />\n";
                         }
 
                          ?>

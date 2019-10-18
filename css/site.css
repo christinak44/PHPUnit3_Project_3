@@ -116,9 +116,9 @@ p {
 	font-size: 18px;
 }
 p a {
-	border-bottom: 2px solid #678f89;
-	padding: 0;
-	color: #678f89;
+	border-bottom: 2px solid #f5671b;
+	padding: 5;
+	color: #f5671b;
 	text-decoration: none;
 }
 ul li {
@@ -126,9 +126,9 @@ ul li {
 	font-size: 18px;
 }
 ul li a {
-	border-bottom: 2px solid #678f89;
+	border-bottom: 2px solid #f5671b;
 	line-height: 1.8em;
-	color: #678f89;
+	color: #f5671b;
 	text-decoration: none;
 }
 
