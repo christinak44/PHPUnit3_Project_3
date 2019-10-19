@@ -5,8 +5,26 @@ function get_entries_list(){
    include "connection.php";
 
    try {
-   return $db->query('SELECT * FROM entries
-   ORDER BY 2 DESC');
+   return $db->query('SELECT entries.*, tags.tag FROM entries
+   LEFT JOIN tags ON entries.id = tags.entry_id
+   ORDER BY 3 DESC');
+
+ } catch (Exception $e){
+     echo $e->getMessage();
+     return array();
+ }
+
+
+}
+function list_by_tag($tag_id){
+   include "connection.php";
+
+   try {
+   return $db->query('SELECT entries.*, tags.tag FROM entries
+   LEFT JOIN tags ON entries.id = tags.entry_id
+   WHERE tags.entry_id = ?');
+
+  $result->bindValue(1, $tag, PDO::PARAM_STR);
 
  } catch (Exception $e){
      echo $e->getMessage();
@@ -18,7 +36,10 @@ function get_entries_list(){
 function get_detail_page($id){
   include "connection.php";
 
-  $sql = ' SELECT * FROM entries WHERE id = ?';
+  $sql = ' SELECT entries.*, tags.tag FROM entries
+  LEFT JOIN tags ON entries.id = tags.entry_id
+  WHERE id = ?';
+
 
   try {
        $results = $db->prepare($sql);
@@ -43,7 +64,7 @@ function add_entry($title, $date, $time_spent, $learned, $resources, $id = null)
       $results = $db->prepare($sql);
       $results->bindValue(1, $title, PDO::PARAM_STR);
       $results->bindValue(2, $date, PDO::PARAM_STR);
-      $results->bindValue(3, $time_spent, PDO::PARAM_INT);
+      $results->bindValue(3, $time_spent, PDO::PARAM_STR);
       //phpmanual referenced for acceptable value types
       $results->bindValue(4, $learned, PDO::PARAM_LOB);
       $results->bindValue(5, $resources, PDO::PARAM_LOB);

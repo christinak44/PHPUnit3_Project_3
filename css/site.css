@@ -16,19 +16,32 @@ body {
 	border: 1px solid black;
 }
 
-header .site-header {
+header .site-header::before{
+  background: #c91221;
+	content: "";
+	opacity: 0.1;
 	margin: 0 auto;
 	height: 95px;
+	position: fixed;
+  width: 100%;
+  top: 0px;
+	left:0px;
+	z-index: 1;
+
 }
 header .logo i {
-	color: #678f89;
+	color: black;
 	margin: 20px 0 0 -5px;
 	float: left;
 	font-size: 40px;
+	z-index: 100;
+	position: relative;
 }
 header .button {
+	color: white;
 	float: right;
 	margin: 33px 0 0 0;
+	z-index: 100;
 }
 footer {
 	text-align: center;
@@ -42,11 +55,22 @@ footer {
    Button Styles
    ========================================================================== */
 
-.button {
+.button{
 	padding: 8px 10px 6px 10px;
-	background: #678f89;
-	border: 2px solid #678f89;
+	background: black;
+	border: 1px solid #c91221;
 	border-radius: 4px;
+	text-decoration: none;
+	color: #FFF;
+	position: relative;
+	text-align: center;
+	font-size: 14px;
+}
+.button-tag{
+	padding: 6px 8px 4px 8px;
+	background: black;
+	border: .5px solid black;
+	border-radius: 15px;
 	text-decoration: none;
 	color: #FFF;
 	position: relative;
@@ -97,6 +121,7 @@ h3 {
 h1 {
 	font-size: 44px;
 	margin-bottom: 12px;
+	line-height: 1.8em;
 }
 h2 {
 	font-size: 32px;
@@ -118,7 +143,7 @@ p {
 p a {
 	border-bottom: 2px solid #f5671b;
 	padding: 5;
-	color: #f5671b;
+	color: #678f89;
 	text-decoration: none;
 }
 ul li {
@@ -126,9 +151,9 @@ ul li {
 	font-size: 18px;
 }
 ul li a {
-	border-bottom: 2px solid #f5671b;
+	border-bottom: 2px solid #678f89;
 	line-height: 1.8em;
-	color: #f5671b;
+	color: #678f89;
 	text-decoration: none;
 }
 
@@ -150,7 +175,7 @@ ul li a {
 	margin-bottom: 35px;
 }
 .entry-list article {
-	margin-bottom: 70px;
+	margin-bottom: 80px;
 	text-align: center;
 }
 .entry-list article:last-child {
@@ -217,7 +242,7 @@ form textarea:focus {
 form input[type=text]:hover,
 form input[type=date]:hover
 form textarea:hover {
-	border-color: #678f89;
+	border-color: #1b9914;
 }
 .edit-entry form textarea,
 .new-entry form textarea {

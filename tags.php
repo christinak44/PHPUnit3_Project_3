@@ -44,21 +44,23 @@
                     <article class="entry-list">
                         <?php
                         include "inc/functions.php";
-                        foreach (get_entries_list() as $item) {
+                        $tag = filter_input(INPUT_GET, 'tag', FILTER_SANITIZE_STRING);
+                        foreach (list_by_tag($tag_id) as $item) {
                           echo "<h2><a href='/detail.php?id=" . $item['id'] . "'>" . $item['title'] . "</a></h2>";
                           echo "<time>" . date('F jS,Y',strtotime($item['date'])) . "</time> &nbsp <a href='remove_entry.php?id=" . $item['id'] . "' style='color:#f5671b'>Delete</a>";
                           //echo "<a href='tags.php?tag=" . trim($item['tag']) . "'>#" . trim($item['tag']) . "</a> ";
                           //echo "<input type='submit' value='Delete' />\n";
-                          echo "<form action='tags.php?tag=' method='get'>";
+                          echo "<p>";
                           if (!empty($item['tag'])) {
                                $tags = explode(trim(','), $item['tag']);
                                foreach ($tags as $tag) {
                                //echo "<a href='tags.php?tag=" . trim($tag) . "'>#" . trim($tag) . "</a> ";
-                               echo "<button type='submit' class= 'button-tag'>" . trim($tag) . "</button>";
+                               echo "<button onclick='window.location. href='tags.php?tag=" . trim($tag) . "' class= 'button-tag'>" . trim($tag) . "</button>";
                                echo "&nbsp";
                               }
                           }
-                          echo "</form>";
+                          echo "</p>";
+
                         }
                         //var_dump($tag);
                          ?>

@@ -14,6 +14,24 @@ include 'inc/header.php'; ?>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/site.css">
+        <style>
+         body:after {
+        content: "";
+  background-image: url("css/images/white-math-page-paper-texture.jpg");
+        background-repeat:no-repeat;
+        background-position:center;
+        background-attachment:fixed;
+        background-size: cover;
+        opacity: 0.25;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        position: absolute;
+        z-index: -1;
+}
+</style>
+    </head>
 
             <div class="container">
               <!--  <div class="site-header">
@@ -27,7 +45,7 @@ include 'inc/header.php'; ?>
                 <div class="entry-list single">
                     <article>
 
-                      <h1><?php echo $entry['title']; ?></h1>
+                      <h2><?php echo $entry['title']; ?></h2>
                       <time><?php echo date('F jS,Y',strtotime($entry['date'])); ?></time>
 
 
@@ -45,18 +63,33 @@ include 'inc/header.php'; ?>
                         </div>
                         <div class="entry">
                             <h3>Resources to Remember:</h3>
-                            <ul>
-                                <li><a href="">Lorem ipsum dolor sit amet</a></li>
-                                <li><a href="">Cras accumsan cursus ante, non dapibus tempor</a></li>
-                                <li>Nunc ut rhoncus felis, vel tincidunt neque</li>
-                                <li><a href="">Ipsum dolor sit amet</a></li>
-                            </ul>
-                        </div>-->
+                            <?php if (!empty($entry['resources'])) {
+                echo "<ul>";
+                foreach (explode(trim(','), $entry['resources']) as $resource) {
+                    echo "<li>" . trim($resource) . "</ br></li>";
+                }
+                echo "</ul>";
+              }
+              ?>
+                        </div>
+                        <div class="entry">
+                            <h3>Tags:</h3>
+                            <?php if (!empty($entry['tag'])) {
+                echo "<ul>";
+                foreach (explode(trim(','), $entry['tag']) as $tag) {
+                    echo "<button onclick='window.location. href='tags.php?tag=" . trim($tag) . "' class= 'button-tag'>" . trim($tag) . "</button>";
+                    echo "&nbsp";
+                }
+                echo "</ul>";
+              }
+              ?>
+                        </div>
                     </article>
                 </div>
             </div>
             <div class="edit">
-                <p><a href="edit.php?id=<?php echo $id; ?>">Edit Entry</a></p>
+                <p><a href="edit.php?id=<?php echo $id; ?>">Edit Entry</a>
+                <a href="delete.php?id=<?php echo $id; ?>"style='color:#f5671b'>Delete</a></p>
             </div>
         </section>
         <?php include 'inc/footer.php'; ?>

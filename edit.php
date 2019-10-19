@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
     $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
     $date = trim(filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING));
-    $time_spent = trim(filter_input(INPUT_POST, 'timeSpent', FILTER_SANITIZE_NUMBER_INT));
+    $time_spent = trim(filter_input(INPUT_POST, 'timeSpent', FILTER_SANITIZE_STRING));
     $learned = trim(filter_input(INPUT_POST, 'whatILearned', FILTER_SANITIZE_STRING));
     $resources = trim(filter_input(INPUT_POST, 'ResourcesToRemember', FILTER_SANITIZE_STRING));
 
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           if (add_entry( $title, $date, $time_spent, $learned, $resources, $id)) {
            echo 'Update complete.';
    //Timed redirect referenced- https://stackoverflow.com/questions/6119451/page-redirect-after-certain-time-php
-            header('refresh: 5; url = detail.php?id="'. $id . '"');
+            header('refresh: 3; url = detail.php?id="'. $id . '"');
             exit;
         } else {
             echo 'Could not update entry';
@@ -40,6 +40,23 @@ include 'inc/header.php';
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/site.css">
+        <style>
+         body:after {
+        content: "";
+  background-image: url("css/images/white-math-page-paper-texture.jpg");
+        background-repeat:no-repeat;
+        background-position:center;
+        background-attachment:fixed;
+        background-size: cover;
+        opacity: 0.25;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        position: absolute;
+        z-index: -1;
+}
+</style>
     </head>
     <body>
 
@@ -51,13 +68,13 @@ include 'inc/header.php';
                         <label for="title"> Title</label>
                         <input id="title" type="text" name="title" value="<?php echo $title; ?>"><br>
                         <label for="date">Date</label>
-                        <input id="date" type="date" name="date"><br>
+                        <input id="date" type="date" name="date" value="<?php echo $date; ?>"><br>
                         <label for="time-spent"> Time Spent</label>
-                        <input id="time-spent" type="text" name="timeSpent"><br>
+                        <input id="time-spent" type="text" name="timeSpent" value="<?php echo $time_spent; ?>"><br>
                         <label for="what-i-learned">What I Learned</label>
-                        <textarea id="what-i-learned" rows="5" name="whatILearned"></textarea>
+                        <textarea id="what-i-learned" rows="5" name="whatILearned"><?php echo $learned; ?></textarea>
                         <label for="resources-to-remember">Resources to Remember</label>
-                        <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember"></textarea>
+                        <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember"><?php echo $resources; ?></textarea>
                         <?php
                         if (!empty($id)){
                              echo '<input type="hidden" name="id" value="' . $id . '" />';
