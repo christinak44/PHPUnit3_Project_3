@@ -1,12 +1,13 @@
 <?php
 //journal app functions
 //create list view of entries to be displayed on main[index.php] page
-function get_entries_list(){
+function get_entries_list($id){
    include "connection.php";
 
    try {
-   return $db->query('SELECT entries.*, tags.tag FROM entries
+   return $db->query('SELECT entries.*, group_concat(tags.tag) AS tags FROM entries
    LEFT JOIN tags ON entries.id = tags.entry_id
+   GROUP BY entries.id
    ORDER BY 3 DESC');
 
  } catch (Exception $e){
@@ -16,16 +17,16 @@ function get_entries_list(){
 
 
 }
-function list_by_tag($tag_id){
+function get_tags_list($tag_id){
    include "connection.php";
 
    try {
+     $sql = 'SELECT tags.* FROM tags';
+      if (!empty($entry_id)) {
    return $db->query('SELECT entries.*, tags.tag FROM entries
    LEFT JOIN tags ON entries.id = tags.entry_id
-   WHERE tags.entry_id = ?');
-
-  $result->bindValue(1, $tag, PDO::PARAM_STR);
-
+   ORDER BY 3 DESC');
+   }
  } catch (Exception $e){
      echo $e->getMessage();
      return array();
@@ -33,12 +34,33 @@ function list_by_tag($tag_id){
 
 
 }
+function list_by_tag($tag){
+   include "connection.php";
+
+   try {
+   return $db->prepare('SELECT entries.*, tags.tag FROM entries
+   LEFT JOIN tags ON entries.id = tags.entry_id
+   WHERE tag = ?');
+
+  $results->bindParam(1, $tag, PDO::PARAM_STR);
+
+  $results->execute();
+
+ } catch (Exception $e){
+     echo $e->getMessage();
+     return array();
+ }
+ return $results->fetch();
+
+}
+
 function get_detail_page($id){
   include "connection.php";
 
-  $sql = ' SELECT entries.*, tags.tag FROM entries
+  $sql = 'SELECT entries.*, group_concat(tags.tag) AS tags FROM entries
   LEFT JOIN tags ON entries.id = tags.entry_id
-  WHERE id = ?';
+  WHERE id = ?
+  GROUP BY entries.id';
 
 
   try {

@@ -77,9 +77,12 @@ include 'inc/header.php'; ?>
                             <?php if (!empty($entry['tag'])) {
                 echo "<ul>";
                 foreach (explode(trim(','), $entry['tag']) as $tag) {
-                    echo "<button onclick='window.location. href='tags.php?tag=" . trim($tag) . "' class= 'button-tag'>" . trim($tag) . "</button>";
-                    echo "&nbsp";
+                  echo "<form methode='get' action='tags.php?=" . trim($tag) ."'>";
+                  echo "<input type='hidden' name='" . trim($tag) . "' id='" . trim($tag) . "' />";
+                  echo "<input type='submit' class= 'button-tag' value= '" . trim($tag) . "' />";
+                  echo "&nbsp";
                 }
+                echo "</form>";
                 echo "</ul>";
               }
               ?>
