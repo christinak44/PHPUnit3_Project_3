@@ -40,7 +40,7 @@
         <section>
             <div class"container">
                 <div class="entry-list" style = "border:1px solid black;">
-                  <h2>Log:</h2>
+                  <h2><?php echo $_GET['tag']; ?> tag results:</h2>
                     <article class="entry-list">
                         <?php
                         include "inc/functions.php";
@@ -49,13 +49,13 @@
                         $tag = trim(filter_input(INPUT_GET, 'tag', FILTER_SANITIZE_STRING));
                         var_dump($tag);
 
-                        foreach (list_by_tag($tag) as $item) {
+                        foreach (list_by_tag($tag, $id) as $item) {
                           echo "<h2><a href='/detail.php?id=" . $item['id'] . "'>" . $item['title'] . "</a></h2>";
                           echo "<time>" . date('F jS,Y',strtotime($item['date'])) . "</time> &nbsp <a href='remove_entry.php?id=" . $item['id'] . "' style='color:#f5671b'>Delete</a>";
                           //echo "<a href='tags.php?tag=" . trim($item['tag']) . "'>#" . trim($item['tag']) . "</a> ";
                           //echo "<input type='submit' value='Delete' />\n";
-                          if (!empty($item['tag'])) {
-                               $tags = explode(trim(','), $item['tag']);
+                          if (!empty($item['tags'])) {
+                               $tags = explode(trim(','), $item['tags']);
                                foreach ($tags as $tag) {
                                echo "<form methode='get' action='tags.php?tag='" . trim($tag) ."'>";
                                //echo "<a href='tags.php?tag=" . trim($tag) . "'>#" . trim($tag) . "</a> ";
