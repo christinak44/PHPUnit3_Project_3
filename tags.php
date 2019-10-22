@@ -51,21 +51,21 @@
 
                         foreach (list_by_tag($tag) as $item) {
                           echo "<h2><a href='/detail.php?id=" . $item['id'] . "'>" . $item['title'] . "</a></h2>";
-                          echo "<time>" . date('F jS,Y',strtotime($item['date'])) . "</time> &nbsp <a href='remove_entry.php?id=" . $item['id'] . "' style='color:#f5671b'>Delete</a>";
+                          echo "<time>" . date('F jS,Y',strtotime($item['date'])) . "</time> &nbsp <a href='remove_entry.php?id=" . $item['id'] . "' style='color:#f5671b'>Delete</a></ br>\n";
                           //echo "<a href='tags.php?tag=" . trim($item['tag']) . "'>#" . trim($item['tag']) . "</a> ";
                           //echo "<input type='submit' value='Delete' />\n";
 
                           if (!empty($item['tag'])) {
                                $tags = explode(trim(','), $item['tag']);
-                               var_dump($tags);
                                foreach ($tags as $tag) {
                                  //echo "<form method='get' action='tags.php?tag=" . trim($tag) ."'>";
-                                 echo "<a href='tags.php?tag=" . trim($tag) . "'class='button-tag'>#" . trim($tag) . "</a> ";
+                                 echo "<a href='tags.php?tag=" . trim($tag) . "'class='button-tag'>#" . trim($tag) . "</a>";
                                  //echo "<input type='hidden' name='" . trim($tag) . "' id='" . trim($tag) . "' />";
                                  //echo "<input type='submit' class= 'button-tag' value= '" . trim($tag) . "' />";
-                                 echo "</ br>";
+                                 //echo "</ br>\n";
                                  //echo "&nbsp";
                         }
+
                       }
                     }
                   }    ;

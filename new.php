@@ -2,7 +2,7 @@
 <?php
 require 'inc/functions.php';
 $page = 'New Entry';
-$title = $date = $time_spent = $learned = $resources = '';
+$title = $date = $time_spent = $learned = $resources = $tag = '';
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -11,6 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $time_spent = trim(filter_input(INPUT_POST, 'timeSpent', FILTER_SANITIZE_NUMBER_INT));
     $learned = trim(filter_input(INPUT_POST, 'whatILearned', FILTER_SANITIZE_STRING));
     $resources = trim(filter_input(INPUT_POST, 'ResourcesToRemember', FILTER_SANITIZE_STRING));
+    //$tag = trim(filter_input(INPUT_POST, 'Tag', FILTER_SANITIZE_STRING));
         if(empty($title) || empty($date) || empty($time_spent) || empty($learned)){
            echo $error_message = 'Please enter the required fields: Title, Date, Time Spent, Learned';
         } else {
@@ -54,6 +55,8 @@ include 'inc/header.php';
                         <textarea id="what-i-learned" rows="5" name="whatILearned"></textarea>
                         <label for="resources-to-remember">Resources to Remember</label>
                         <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember"></textarea>
+                        <!--<label for="tag">Tags</label>
+                        <textarea id="tag" rows="5" name="Tag"></textarea>-->
                         <?php
                         if (!empty($id)){
                              echo '<input type="hidden" name="id" value="' .$id . '" />';
