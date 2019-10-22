@@ -1,8 +1,9 @@
 <?php
 require 'inc/functions.php';
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-$entry = get_detail_page($id);
-
+if(isset($_GET['id'])){
+  $entry = get_detail_page($id);
+}
 include 'inc/header.php'; ?>
 <html>
     <head>

@@ -17,27 +17,30 @@ function get_entries_list($id){
 
 
 }
-function list_by_tag($tag, $id){
+function list_by_tag($tag){
    include "connection.php";
 
    try {
-   $sql = 'SELECT entries.*, tags.tag AS tag FROM entries
-   LEFT JOIN tags ON entries.id = tags.entry_id
-   WHERE tag = ?';
+   $sql = "SELECT entries.* FROM entries";
+     if (!empty($tag)) {
+      $sql = 'SELECT entries.*, tags.tag AS tag, tags_to_entries.tag_id AS tag_id FROM entries
+      LEFT JOIN tags ON tags_to_entries.tag_id = tags.tag_id
+      WHERE tag = ?';
 
    /*return $db->prepare('SELECT entries.*, tags.tag FROM entries
    LEFT JOIN tags ON entries.id = tags.entry_id
    WHERE tag = ?');*/
+
   $results = $db->prepare($sql);
   $results->bindValue(1, $tag, PDO::PARAM_STR);
-  $results->bindParam(2, $id, PDO::PARAM_INT);
+} //$results->bindParam(2, $id, PDO::PARAM_INT);
   $results->execute();
 
  } catch (Exception $e){
      echo $e->getMessage();
      return array();
  }
- 
+
  return $results->fetch();
 
 }
