@@ -52,7 +52,7 @@
                           //echo "<input type='submit' value='Delete' />\n";
 
                               if (!empty($item['tags'])) {
-                               $tags = explode(trim(','), $item['tags']);
+                               $tags = explode(',',$item['tags']);
                                foreach ($tags as $tag) {
                                //echo "<form method='get' action='tags.php?tag=" . trim($tag) ."'>";
                                echo "<a href='tags.php?tag=" . trim($tag) . "'class='button-tag'>#" . trim($tag) . "</a> ";

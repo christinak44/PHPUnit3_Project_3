@@ -22,7 +22,7 @@ function list_by_tag($tag){
 
    try {
      if (!empty($tag)) {
-      $sql = 'SELECT entries.*, tags.tag FROM entries
+      $sql = 'SELECT entries.*, tags.* FROM entries
       LEFT JOIN tags ON entries.id = tags.entry_id
       JOIN tags_to_entries ON tags.tag_id = tags_to_entries.tag_id
       WHERE tags.tag = ?';
@@ -64,11 +64,11 @@ function get_detail_page($id){
   return $results->fetch();
 
 }
-function add_entry($title, $date, $time_spent, $learned, $resources, $id = null) {
+function add_entry($title, $date, $time_spent, $learned, $resources, $tag, $id = null) {
  include "connection.php";
 
  if ($id) {
-     $sql = 'UPDATE entries SET title = ?, date = ?, time_spent = ?, learned = ?, resources = ? WHERE id = ?';
+     $sql = 'UPDATE entries SET title = ?, date = ?, time_spent = ?, learned = ?, resources = ?, WHERE id = ?';
    } else {
    $sql = 'INSERT INTO entries (title, date, time_spent, learned, resources) VALUES (?, ?, ?, ?, ?)';
    }

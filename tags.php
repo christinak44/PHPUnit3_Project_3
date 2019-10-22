@@ -54,19 +54,21 @@
                           echo "<time>" . date('F jS,Y',strtotime($item['date'])) . "</time> &nbsp <a href='remove_entry.php?id=" . $item['id'] . "' style='color:#f5671b'>Delete</a>";
                           //echo "<a href='tags.php?tag=" . trim($item['tag']) . "'>#" . trim($item['tag']) . "</a> ";
                           //echo "<input type='submit' value='Delete' />\n";
+
                           if (!empty($item['tag'])) {
                                $tags = explode(trim(','), $item['tag']);
-                               foreach ($tag as $tag) {
-                               echo "<form methode='get' action='tags.php?tag='" . trim($tag) ."'>";
-                               //echo "<a href='tags.php?tag=" . trim($tag) . "'>#" . trim($tag) . "</a> ";
-                               echo "<input type='submit' class= 'button-tag' value= '" . trim($tag) . "' />";
-                               echo "&nbsp";
-                              }
-                              echo "</form>";
+                               var_dump($tags);
+                               foreach ($tags as $tag) {
+                                 //echo "<form method='get' action='tags.php?tag=" . trim($tag) ."'>";
+                                 echo "<a href='tags.php?tag=" . trim($tag) . "'class='button-tag'>#" . trim($tag) . "</a> ";
+                                 //echo "<input type='hidden' name='" . trim($tag) . "' id='" . trim($tag) . "' />";
+                                 //echo "<input type='submit' class= 'button-tag' value= '" . trim($tag) . "' />";
+                                 echo "</ br>";
+                                 //echo "&nbsp";
                         }
                       }
                     }
-                        ;
+                  }    ;
                          ?>
                         <!--<h2><a href="detail.html">The best day I’ve ever had</a></h2>
                         <time datetime="2016-01-31">January 31, 2016</time>-->
