@@ -21,11 +21,11 @@ function list_by_tag($tag){
    include "connection.php";
 
    try {
-   $sql = "SELECT entries.* FROM entries";
      if (!empty($tag)) {
-      $sql = 'SELECT entries.*, tags.tag AS tag, tags_to_entries.tag_id AS tag_id FROM entries
-      LEFT JOIN tags ON tags_to_entries.tag_id = tags.tag_id
-      WHERE tag = ?';
+      $sql = 'SELECT entries.*, tags.tag FROM entries
+      LEFT JOIN tags ON entries.id = tags.entry_id
+      JOIN tags_to_entries ON tags.tag_id = tags_to_entries.tag_id
+      WHERE tags.tag = ?';
 
    /*return $db->prepare('SELECT entries.*, tags.tag FROM entries
    LEFT JOIN tags ON entries.id = tags.entry_id
@@ -41,7 +41,7 @@ function list_by_tag($tag){
      return array();
  }
 
- return $results->fetch();
+ return $results->fetchAll(PDO::FETCH_ASSOC);
 
 }
 function get_detail_page($id){
