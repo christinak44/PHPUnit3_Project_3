@@ -1,7 +1,7 @@
 <?php
 //journal app functions
 //create list view of entries to be displayed on main[index.php] page
-function get_entries_list($id){
+function get_entries_list(){
    include "connection.php";
 
    try {
@@ -64,7 +64,7 @@ function get_detail_page($id){
   return $results->fetch();
 
 }
-function add_entry($title, $date, $time_spent, $learned, $resources, $id = null) {
+/*function add_entry($title, $date, $time_spent, $learned, $resources, $id = null) {
  include "connection.php";
 
  if ($id) {
@@ -90,8 +90,8 @@ function add_entry($title, $date, $time_spent, $learned, $resources, $id = null)
     }
   return true;
 
-}
-/*function add_entry($title, $date, $time_spent, $learned, $resources, $tag, $entry_id, $id = null) {
+}*/
+function add_entry($title, $date, $time_spent, $learned, $resources, $tag, $entry_id, $tag_id, $id = null) {
  include "connection.php";
   $sql = $sql2 = $sql3 = '';
  if ($id) {
@@ -101,14 +101,14 @@ function add_entry($title, $date, $time_spent, $learned, $resources, $id = null)
    }
    $sql_results = $db->prepare($sql);
  if ($id) {
-     $sql2 = 'UPDATE tags SET tag = ? WHERE entry_id = ?';
+     $sql2 = 'UPDATE tags SET tag = ?, entry_id = ? WHERE entry_id = ?';
    } else {
    $sql2 = 'INSERT INTO tags (tag, entry_id) VALUES (?, ?)';
    }
    $sql2_results = $db->prepare($sql2);
-
+ if(!isset($id)){
    $sql3 = 'INSERT INTO tags_to_entries (entry_id, tag_id) VALUES (?, ?)';
-
+   }
    $sql3_results = $db->prepare($sql3);
   try {
     $db->beginTransaction();
@@ -127,12 +127,13 @@ function add_entry($title, $date, $time_spent, $learned, $resources, $id = null)
       $sql_results->execute();
 
       $sql2_results->bindValue(1, $tag, PDO::PARAM_STR);
+      if($id) {
       $sql2_results->bindValue(2, $entry_id, PDO::PARAM_INT);
-
+      }
       $sql2_results->execute();
 
       $sql3_results->bindValue(1, $entry_id, PDO::PARAM_INT);
-      $sql3_results->bindValue(2, $tag, PDO::PARAM_STR);
+      $sql3_results->bindValue(2, $tag_id, PDO::PARAM_STR);
 
       $sql3_results->execute();
     $db->commit();
@@ -142,7 +143,7 @@ function add_entry($title, $date, $time_spent, $learned, $resources, $id = null)
     }
   return true;
 
-}*/
+}
 function delete_entry($id) {
     include 'connection.php';
     $sql = 'DELETE FROM entries WHERE id = ?';

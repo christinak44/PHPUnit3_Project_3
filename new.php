@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if(empty($title) || empty($date) || empty($time_spent) || empty($learned)){
            echo $error_message = 'Please enter the required fields: Title, Date, Time Spent, Learned';
         } else {
-        if (add_entry($title, $date, $time_spent, $learned, $resources, /*$tag, $entry_id*/)) {
+        if (add_entry($title, $date, $time_spent, $learned, $resources /*$tag, $entry_id*/)) {
             echo "<h2>Add successful!</h2>";
             header('refresh: 5; url = index.php');
             //exit;
