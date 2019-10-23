@@ -1,9 +1,9 @@
 <?php
 require 'inc/functions.php';
 
-$title = $date = $time_spent = $learned = $resources = '';
+$title = $date = $time_spent = $learned = $resources = /*$tag =*/ '';
 if (isset($_GET['id'])) {
-    list($id, $title, $date, $time_spent, $learned, $resources) = get_detail_page(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
+    list($id, $title, $date, $time_spent, $learned, $resources, $tag) = get_detail_page(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -13,12 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $time_spent = trim(filter_input(INPUT_POST, 'timeSpent', FILTER_SANITIZE_STRING));
     $learned = trim(filter_input(INPUT_POST, 'whatILearned', FILTER_SANITIZE_STRING));
     $resources = trim(filter_input(INPUT_POST, 'ResourcesToRemember', FILTER_SANITIZE_STRING));
+    //$tag = trim(filter_input(INPUT_POST, 'tag', FILTER_SANITIZE_STRING));
+    //$entry_id = trim(filter_input(INPUT_POST, 'entry_id', FILTER_SANITIZE_STRING));
 
         if(empty($title) || empty($date) || empty($time_spent) || empty($learned)){
            echo $error_message = 'Please enter the required fields: Title, Date, Time Spent, Learned';
         } else {
-          if (add_entry( $title, $date, $time_spent, $learned, $resources, $id)) {
-           echo 'Update complete.';
+        if (add_entry( $title, $date, $time_spent, $learned, $resources, $id, /*$tag*/)) {
+           echo '<h2>Update complete.</h2>';
    //Timed redirect referenced- https://stackoverflow.com/questions/6119451/page-redirect-after-certain-time-php
             header('refresh: 3; url = detail.php?id="'. $id . '"');
             exit;
@@ -75,9 +77,12 @@ include 'inc/header.php';
                         <textarea id="what-i-learned" rows="5" name="whatILearned"><?php echo $learned; ?></textarea>
                         <label for="resources-to-remember">Resources to Remember</label>
                         <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember"><?php echo $resources; ?></textarea>
+                      <!--  <label for="tag">Tags</label>
+                        <textarea id="tag" rows="5" name="tag"><?php// echo $resources; ?></textarea>-->
                         <?php
                         if (!empty($id)){
                              echo '<input type="hidden" name="id" value="' . $id . '" />';
+                             //echo '<input type="hidden" name="entry_id" value="' . $id . '" />';
                         }
                         ?>
                         <input type="submit" value="Publish Entry" class="button">

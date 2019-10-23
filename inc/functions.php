@@ -68,7 +68,7 @@ function add_entry($title, $date, $time_spent, $learned, $resources, $id = null)
  include "connection.php";
 
  if ($id) {
-     $sql = 'UPDATE entries SET title = ?, date = ?, time_spent = ?, learned = ?, resources = ?, WHERE id = ?';
+     $sql = 'UPDATE entries SET title = ?, date = ?, time_spent = ?, learned = ?, resources = ? WHERE id = ?';
    } else {
    $sql = 'INSERT INTO entries (title, date, time_spent, learned, resources) VALUES (?, ?, ?, ?, ?)';
    }
@@ -91,44 +91,49 @@ function add_entry($title, $date, $time_spent, $learned, $resources, $id = null)
   return true;
 
 }
-/*function add_entry($title, $date, $time_spent, $learned, $resources, $tag, $id = null) {
+/*function add_entry($title, $date, $time_spent, $learned, $resources, $tag, $entry_id, $id = null) {
  include "connection.php";
-
+  $sql = $sql2 = $sql3 = '';
  if ($id) {
-     $sql = 'UPDATE entries SET title = ?, date = ?, time_spent = ?, learned = ?, resources = ?, WHERE id = ?';
+     $sql = 'UPDATE entries SET title = ?, date = ?, time_spent = ?, learned = ?, resources = ? WHERE id = ?';
    } else {
    $sql = 'INSERT INTO entries (title, date, time_spent, learned, resources) VALUES (?, ?, ?, ?, ?)';
    }
    $sql_results = $db->prepare($sql);
  if ($id) {
-     $sql2 = 'UPDATE tags SET tag = ?, WHERE entries.id = ?';
+     $sql2 = 'UPDATE tags SET tag = ? WHERE entry_id = ?';
    } else {
-   $sql2 = 'INSERT INTO tags (tag, entries.id) VALUES (?,?)';
+   $sql2 = 'INSERT INTO tags (tag, entry_id) VALUES (?, ?)';
    }
    $sql2_results = $db->prepare($sql2);
-   $sql3 = 'INSERT INTO tags_to_entries (entries.id, tags.tag_id) VALUES (?,?)';
+
+   $sql3 = 'INSERT INTO tags_to_entries (entry_id, tag_id) VALUES (?, ?)';
 
    $sql3_results = $db->prepare($sql3);
   try {
     $db->beginTransaction();
 
-      $results->bindValue(1, $title, PDO::PARAM_STR);
-      $results->bindValue(2, $date, PDO::PARAM_STR);
-      $results->bindValue(3, $time_spent, PDO::PARAM_STR);
+      $sql_results->bindValue(1, $title, PDO::PARAM_STR);
+      $sql_results->bindValue(2, $date, PDO::PARAM_STR);
+      $sql_results->bindValue(3, $time_spent, PDO::PARAM_STR);
       //phpmanual referenced for acceptable value types
-      $results->bindValue(4, $learned, PDO::PARAM_LOB);
-      $results->bindValue(5, $resources, PDO::PARAM_LOB);
+      $sql_results->bindValue(4, $learned, PDO::PARAM_LOB);
+      $sql_results->bindValue(5, $resources, PDO::PARAM_LOB);
+      //$sql_results->bindValue(6, $tag, PDO::PARAM_STR);
+      //$sql_results->bindValue(7, $entry_id, PDO::PARAM_INT);
       if($id) {
-      $results->bindValue(6, $id, PDO::PARAM_INT);
+      $sql_results->bindValue(6, $id, PDO::PARAM_INT);
       }
-      $results->execute();
+      $sql_results->execute();
 
-      $sql2_results->bindValue(1, $entries.id, PDO::PARAM_STR);
-      $sql2_results->bindValue(2, $tags.tag_id, PDO::PARAM_STR);
+      $sql2_results->bindValue(1, $tag, PDO::PARAM_STR);
+      $sql2_results->bindValue(2, $entry_id, PDO::PARAM_INT);
+
       $sql2_results->execute();
 
-      $sql3_results->bindValue(1, $tag, PDO::PARAM_STR);
-      $sql3_results->bindValue(2, $entries.id, PDO::PARAM_STR);
+      $sql3_results->bindValue(1, $entry_id, PDO::PARAM_INT);
+      $sql3_results->bindValue(2, $tag, PDO::PARAM_STR);
+
       $sql3_results->execute();
     $db->commit();
   } catch (Exception $e) {

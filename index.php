@@ -44,7 +44,9 @@
                     <article class="entry-list">
                         <?php
                         include "inc/functions.php";
-
+                      /*  if ($_SERVER['REQUEST_METHOD'] == 'GET') {*/
+                            $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+                      //  }
                         foreach (get_entries_list($id) as $item) {
                           echo "<h2><a href='/detail.php?id=" . $item['id'] . "'>" . $item['title'] . "</a></h2>";
                           echo "<time>" . date('F jS,Y',strtotime($item['date'])) . "</time> &nbsp <a href='remove_entry.php?id=" . $item['id'] . "' style='color:#f5671b'>Delete</a><br>";
