@@ -5,8 +5,9 @@ function get_entries_list(){
    include "connection.php";
 
    try {
-   return $db->query('SELECT entries.*, group_concat(tags.tag) AS tags FROM entries
-   LEFT JOIN tags ON entries.id = tags.entry_id
+   return $db->query('SELECT entries.id, entries.title, entries.date, entries.time_spent, entries.learned, entries.resources, tags_to_entries.tag_id, group_concat(tags.tag) AS tags FROM entries
+   LEFT JOIN tags_to_entries ON entries.id = tags_to_entries.entry_id
+   LEFT JOIN tags ON tags_to_entries.tag_id = tags.id
    GROUP BY entries.id
    ORDER BY 3 DESC');
 
@@ -17,22 +18,24 @@ function get_entries_list(){
 
 
 }
-function list_by_tag($tag){
+function list_by_tag($tag_id){
    include "connection.php";
 
    try {
-     if (!empty($tag)) {
-      $sql = 'SELECT entries.*, tags.* FROM entries
-      LEFT JOIN tags ON entries.id = tags.entry_id
-      JOIN tags_to_entries ON tags.tag_id = tags_to_entries.tag_id
-      WHERE tags.tag = ?';
+     if (!empty($tag_id)) {
+      $sql = 'SELECT entries.id, entries.title, entries.date, entries.time_spent, entries.learned, entries.resources, tags_to_entries.tag_id, group_concat(tags.tag) AS tags FROM entries
+      LEFT JOIN tags_to_entries ON entries.id = tags_to_entries.entry_id
+      LEFT JOIN tags ON tags_to_entries.tag_id = tags.id
+      GROUP BY entries.id
+      HAVING tags.id = ?
+      ORDER BY 3 DESC';
 
    /*return $db->prepare('SELECT entries.*, tags.tag FROM entries
    LEFT JOIN tags ON entries.id = tags.entry_id
    WHERE tag = ?');*/
 
   $results = $db->prepare($sql);
-  $results->bindValue(1, $tag, PDO::PARAM_STR);
+  $results->bindValue(1, $tag_id, PDO::PARAM_INT);
 } //$results->bindParam(2, $id, PDO::PARAM_INT);
   $results->execute();
 
@@ -91,7 +94,7 @@ function get_detail_page($id){
   return true;
 
 }*/
-function add_entry($title, $date, $time_spent, $learned, $resources, $tag, $entry_id, $tag_id, $id = null) {
+function add_entry($title, $date, $time_spent, $learned, $resources, $tag, $tag_id, $entry_id, $id = null) {
  include "connection.php";
   $sql = $sql2 = $sql3 = '';
  if ($id) {
@@ -101,9 +104,9 @@ function add_entry($title, $date, $time_spent, $learned, $resources, $tag, $entr
    }
    $sql_results = $db->prepare($sql);
  if ($id) {
-     $sql2 = 'UPDATE tags SET tag = ?, entry_id = ? WHERE entry_id = ?';
+     $sql2 = 'UPDATE tags SET tag = ? WHERE id = ?';
    } else {
-   $sql2 = 'INSERT INTO tags (tag, entry_id) VALUES (?, ?)';
+   $sql2 = 'INSERT INTO tags (tag) VALUES (?)';
    }
    $sql2_results = $db->prepare($sql2);
  if(!isset($id)){
@@ -127,9 +130,9 @@ function add_entry($title, $date, $time_spent, $learned, $resources, $tag, $entr
       $sql_results->execute();
 
       $sql2_results->bindValue(1, $tag, PDO::PARAM_STR);
-      if($id) {
+      /*if($id) {
       $sql2_results->bindValue(2, $entry_id, PDO::PARAM_INT);
-      }
+    }*/
       $sql2_results->execute();
 
       $sql3_results->bindValue(1, $entry_id, PDO::PARAM_INT);

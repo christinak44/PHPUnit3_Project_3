@@ -1,7 +1,7 @@
 <?php
 require 'inc/functions.php';
 
-$title = $date = $time_spent = $learned = $resources = $tag = '';
+$title = $date = $time_spent = $learned = $resources = $tag = $tag_id = $entry_id = '';
 if (isset($_GET['id'])) {
     list($id, $title, $date, $time_spent, $learned, $resources, $tag) = get_detail_page(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT));
 }
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if(empty($title) || empty($date) || empty($time_spent) || empty($learned)){
            echo $error_message = 'Please enter the required fields: Title, Date, Time Spent, Learned';
         } else {
-        if (add_entry( $title, $date, $time_spent, $learned, $resources, $id, $tag, $tag_id)) {
+        if (add_entry( $title, $date, $time_spent, $learned, $resources, $id, $tag, $tag_id, $entry_id)) {
            echo '<h2>Update complete.</h2>';
    //Timed redirect referenced- https://stackoverflow.com/questions/6119451/page-redirect-after-certain-time-php
             header('refresh: 3; url = detail.php?id="'. $id . '"');
