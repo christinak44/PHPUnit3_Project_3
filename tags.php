@@ -29,7 +29,6 @@
     </head>
     <body>
       <?php
-
       /*https://stackoverflow.com/questions/8798677/cant-get-a-border-around-a-html-div-element
       https://www.photohdx.com/pic-2193/white-math-page-paper-texture
       https://www.wikihow.com/Set-a-Background-Image-in-HTML
@@ -40,35 +39,36 @@
         <section>
             <div class"container">
                 <div class="entry-list" style = "border:1px solid black;">
-                  <h2><?php echo $_GET['tag']; ?> tag results:</h2>
+                  <h2><?php echo $_GET['tag']; var_dump($_GET['tags.tag_id'])?> tag results:</h2>
                     <article class="entry-list">
                         <?php
                         include "inc/functions.php";
-                        if(ISSET($_GET['tag_id'])){
-
-                        $tag_id = trim(filter_input(INPUT_GET, 'tag_id', FILTER_SANITIZE_NUMBER_INT));
-                        var_dump($tag_id);
-
-                        foreach (list_by_tag($tag_id) as $item) {
-                          echo "<h2><a href='/detail.php?id=" . $item['id'] . "'>" . $item['title'] . "</a></h2>";
-                          echo "<time>" . date('F jS,Y',strtotime($item['date'])) . "</time> &nbsp <a href='remove_entry.php?id=" . $item['id'] . "' style='color:#f5671b'>Delete</a></ br>\n";
+                        //$entries_id = null;
+                        //$tag_id = null;
+                      /*   if(isset($_GET['entries_id'])){
+                         $entries_id = filter_input(INPUT_GET, 'entries_id', FILTER_SANITIZE_NUMBER_INT);
+                       }*/
+                          if(!empty($_GET['tag_id'])){
+                          $tag_id = filter_input(INPUT_GET, 'tag_id', FILTER_SANITIZE_NUMBER_INT);
+                           }
+                         $entries = get_entries_list(null, $tag_id);
+                         //var_dump($entries['tag_id']);
+                         foreach ($entries as $entry) {
+                           echo "<h2><a href='/detail.php?id=" . $entry['entries_id'] . "'>" . $entry['title'] . "</a></h2>";
+                           echo "<time>" . date('F jS,Y',strtotime($entry['date'])) . "</time> &nbsp <a href='remove_entry.php?id=" . $entry['entries_id'] . "' style='color:#f5671b'>Delete</a><br>";
                           //echo "<a href='tags.php?tag=" . trim($item['tag']) . "'>#" . trim($item['tag']) . "</a> ";
                           //echo "<input type='submit' value='Delete' />\n";
-
-                          if (!empty($item['tag_id'])) {
-                               $tags = explode(',', $item['tags']);
-                               foreach ($tags as $tag) {
-                                 //echo "<form method='get' action='tags.php?tag=" . trim($tag) ."'>";
-                                 echo "<a href='tags.php?tag_id=" . trim($tag['tag_id']) . "'class='button-tag'>#" . trim($tag) . "</a>";
-                                 //echo "<input type='hidden' name='" . trim($tag) . "' id='" . trim($tag) . "' />";
-                                 //echo "<input type='submit' class= 'button-tag' value= '" . trim($tag) . "' />";
-                                 //echo "</ br>\n";
-                                 //echo "&nbsp";
+                          if($tags = add_tag(null,$entry['entries_id'])) {
+                         foreach ($tags as $tag) {
+                           //echo "<form method='get' action='tags.php?tag=" . trim($tag) ."'>";
+                           echo "<a href='tags.php?tag_id=" . $tag['tags_id'] . "'class='button-tag'>#" . $tag['tag'] . "</a> ";
+                           //echo "<input type='hidden' name='" . trim($tag) . "' id='" . trim($tag) . "' />";
+                          //echo "<input type='submit' class= 'button-tag' value= '" . trim($tag) . "' />";
+                           echo "</ br>";
                         }
-
                       }
                     }
-                  }    ;
+                  //}    ;
                          ?>
                         <!--<h2><a href="detail.html">The best day I’ve ever had</a></h2>
                         <time datetime="2016-01-31">January 31, 2016</time>-->

@@ -8,7 +8,7 @@ $title = $date = $time_spent = $learned = $resources = $tag = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING));
     $date = trim(filter_input(INPUT_POST, 'date', FILTER_SANITIZE_STRING));
-    $time_spent = trim(filter_input(INPUT_POST, 'timeSpent', FILTER_SANITIZE_NUMBER_INT));
+    $time_spent = trim(filter_input(INPUT_POST, 'timeSpent', FILTER_SANITIZE_STRING));
     $learned = trim(filter_input(INPUT_POST, 'whatILearned', FILTER_SANITIZE_STRING));
     $resources = trim(filter_input(INPUT_POST, 'ResourcesToRemember', FILTER_SANITIZE_STRING));
     //$tag = trim(filter_input(INPUT_POST, 'tag', FILTER_SANITIZE_STRING));
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if(empty($title) || empty($date) || empty($time_spent) || empty($learned)){
            echo $error_message = 'Please enter the required fields: Title, Date, Time Spent, Learned';
         } else {
-        if (add_entry($title, $date, $time_spent, $learned, $resources /*$tag, $entry_id*/)) {
+        if (add_entry($title, $date, $time_spent, $learned, $resources, /*$tag, $entry_id*/)) {
             echo "<h2>Add successful!</h2>";
             header('refresh: 5; url = index.php');
             //exit;

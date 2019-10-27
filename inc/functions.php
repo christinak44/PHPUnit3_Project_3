@@ -1,77 +1,78 @@
 <?php
 //journal app functions
 //create list view of entries to be displayed on main[index.php] page
-function get_entries_list(){
+function get_entries_list($entries_id = null, $tag_id = null){
    include "connection.php";
-
+   $sql = "SELECT entries_id, title, date, time_spent, learned, resources FROM entries";
    try {
-   return $db->query('SELECT entries.id, entries.title, entries.date, entries.time_spent, entries.learned, entries.resources, tags_to_entries.tag_id, group_concat(tags.tag) AS tags FROM entries
-   LEFT JOIN tags_to_entries ON entries.id = tags_to_entries.entry_id
-   LEFT JOIN tags ON tags_to_entries.tag_id = tags.id
-   GROUP BY entries.id
-   ORDER BY 3 DESC');
 
- } catch (Exception $e){
-     echo $e->getMessage();
-     return array();
- }
+   if (!empty($tag_id)) {
+      $results = $db->prepare(
+        $sql
+        . " JOIN tags_to_entries ON entries_id = tags_to_entries.entry_id
+        WHERE tags_to_entries.tag_id = ?");
+        $results->bindParam(1, $tag_id, PDO::PARAM_INT);
+        }
+    elseif (!empty($entries_id)) {
+      $results = $db->prepare(
+        $sql
+        . " WHERE entries_id = ?");
+      $results->bindParam(1, $entries_id, PDO::PARAM_INT);
+    } else {
+      $results = $db->prepare($sql
+      . " ORDER BY date DESC");
+    }
+      $results->execute();
 
+      if (!empty($entries_id)) {
+        $entries = $results->fetch();
+         }else{$entries = $results->fetchAll(PDO::FETCH_ASSOC);
+       }
+    } catch (Exception $e){
+      echo $e->getMessage();
+    }
 
+  return $entries;
 }
-function list_by_tag($tag_id){
+function add_tag($tags_id = null, $entry_id = null){
    include "connection.php";
-
+   $sql = "SELECT tags_id, tag FROM tags";
    try {
-     if (!empty($tag_id)) {
-      $sql = 'SELECT entries.id, entries.title, entries.date, entries.time_spent, entries.learned, entries.resources, tags_to_entries.tag_id, group_concat(tags.tag) AS tags FROM entries
-      LEFT JOIN tags_to_entries ON entries.id = tags_to_entries.entry_id
-      LEFT JOIN tags ON tags_to_entries.tag_id = tags.id
-      GROUP BY entries.id
-      HAVING tags.id = ?
-      ORDER BY 3 DESC';
 
-   /*return $db->prepare('SELECT entries.*, tags.tag FROM entries
-   LEFT JOIN tags ON entries.id = tags.entry_id
-   WHERE tag = ?');*/
+   if (!empty($entry_id)) {
+      $results = $db->prepare(
+        $sql
+        . " JOIN tags_to_entries ON tags_id = tags_to_entries.tag_id
+        WHERE tags_to_entries.entry_id = ?");
+        $results->bindParam(1, $entry_id, PDO::PARAM_INT);
+        }
+    elseif (!empty($tags_id)) {
+      $results = $db->prepare(
+        $sql
+        . " WHERE tags_id = ?");
+      $results->bindParam(1, $tags_id, PDO::PARAM_INT);
+    } else {
+      $results = $db->prepare($sql);
+    }
+      $results->execute();
 
-  $results = $db->prepare($sql);
-  $results->bindValue(1, $tag_id, PDO::PARAM_INT);
-} //$results->bindParam(2, $id, PDO::PARAM_INT);
-  $results->execute();
+      if (!empty($tags_id)) {
+        $tags = $results->fetch();
+      }else{$tags = $results->fetchAll(PDO::FETCH_ASSOC);
+       }
+    } catch (Exception $e){
+      echo "bad query";
+    }
 
- } catch (Exception $e){
-     echo $e->getMessage();
-     return array();
- }
-
- return $results->fetchAll(PDO::FETCH_ASSOC);
-
-}
-function get_detail_page($id){
-  include "connection.php";
-
-  $sql = 'SELECT entries.*, group_concat(tags.tag) AS tags FROM entries
-  LEFT JOIN tags ON entries.id = tags.entry_id
-  WHERE id = ?
-  GROUP BY entries.id';
-
-
-  try {
-       $results = $db->prepare($sql);
-       $results->bindValue(1, $id, PDO::PARAM_INT);
-       $results->execute();
-  } catch (Exception $e){
-      echo "Error!:" . $e->getMessage() . "<br />";
-      return false;
+    return $tags;
   }
-  return $results->fetch();
 
-}
-/*function add_entry($title, $date, $time_spent, $learned, $resources, $id = null) {
+
+function add_entry($title, $date, $time_spent, $learned, $resources, $entries_id = null) {
  include "connection.php";
-
- if ($id) {
-     $sql = 'UPDATE entries SET title = ?, date = ?, time_spent = ?, learned = ?, resources = ? WHERE id = ?';
+//add or edit entry with/without tags
+ if ($entries_id) {
+     $sql = 'UPDATE entries SET title = ?, date = ?, time_spent = ?, learned = ?, resources = ? WHERE entries_id = ?';
    } else {
    $sql = 'INSERT INTO entries (title, date, time_spent, learned, resources) VALUES (?, ?, ?, ?, ?)';
    }
@@ -83,8 +84,8 @@ function get_detail_page($id){
       //phpmanual referenced for acceptable value types
       $results->bindValue(4, $learned, PDO::PARAM_LOB);
       $results->bindValue(5, $resources, PDO::PARAM_LOB);
-      if($id) {
-      $results->bindValue(6, $id, PDO::PARAM_INT);
+      if($entries_id) {
+      $results->bindValue(6, $entries_id, PDO::PARAM_INT);
       }
       $results->execute();
   } catch (Exception $e) {
@@ -92,67 +93,69 @@ function get_detail_page($id){
       return false;
     }
   return true;
-
-}*/
-function add_entry($title, $date, $time_spent, $learned, $resources, $tag, $tag_id, $entry_id, $id = null) {
- include "connection.php";
-  $sql = $sql2 = $sql3 = '';
- if ($id) {
-     $sql = 'UPDATE entries SET title = ?, date = ?, time_spent = ?, learned = ?, resources = ? WHERE id = ?';
-   } else {
-   $sql = 'INSERT INTO entries (title, date, time_spent, learned, resources) VALUES (?, ?, ?, ?, ?)';
-   }
-   $sql_results = $db->prepare($sql);
- if ($id) {
-     $sql2 = 'UPDATE tags SET tag = ? WHERE id = ?';
-   } else {
-   $sql2 = 'INSERT INTO tags (tag) VALUES (?)';
-   }
-   $sql2_results = $db->prepare($sql2);
- if(!isset($id)){
-   $sql3 = 'INSERT INTO tags_to_entries (entry_id, tag_id) VALUES (?, ?)';
-   }
-   $sql3_results = $db->prepare($sql3);
-  try {
-    $db->beginTransaction();
-
-      $sql_results->bindValue(1, $title, PDO::PARAM_STR);
-      $sql_results->bindValue(2, $date, PDO::PARAM_STR);
-      $sql_results->bindValue(3, $time_spent, PDO::PARAM_STR);
-      //phpmanual referenced for acceptable value types
-      $sql_results->bindValue(4, $learned, PDO::PARAM_LOB);
-      $sql_results->bindValue(5, $resources, PDO::PARAM_LOB);
-      //$sql_results->bindValue(6, $tag, PDO::PARAM_STR);
-      //$sql_results->bindValue(7, $entry_id, PDO::PARAM_INT);
-      if($id) {
-      $sql_results->bindValue(6, $id, PDO::PARAM_INT);
-      }
-      $sql_results->execute();
-
-      $sql2_results->bindValue(1, $tag, PDO::PARAM_STR);
-      /*if($id) {
-      $sql2_results->bindValue(2, $entry_id, PDO::PARAM_INT);
-    }*/
-      $sql2_results->execute();
-
-      $sql3_results->bindValue(1, $entry_id, PDO::PARAM_INT);
-      $sql3_results->bindValue(2, $tag_id, PDO::PARAM_STR);
-
-      $sql3_results->execute();
-    $db->commit();
-  } catch (Exception $e) {
-      echo "Error!: " . $e->getMessage() . "<br />";
-      return false;
-    }
-  return true;
-
 }
-function delete_entry($id) {
+function get_detail_page($entries_id){
+//in order to edit w/o tag
+  include "connection.php";
+  $sql = 'SELECT entries_id, title, date, time_spent, learned, resources FROM entries
+   WHERE entries_id = ?';
+  try {
+       $results = $db->prepare($sql);
+       $results->bindValue(1, $entries_id, PDO::PARAM_INT);
+       $results->execute();
+  } catch (Exception $e){
+      echo "Error!:" . $e->getMessage() . "<br />";
+      return false;
+  }
+  return $results->fetch();
+}
+/*function tags_array($tags_id, $title){
+include "connection.php";
+try{
+$sql = "SELECT * FROM tags";
+$results = $db->query($sql);
+$tagList = $results->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (Exception $e) {
+    echo "Error!: " . $e->getMessage() . "<br />";
+    return false;
+  }
+  return $tagList;
+  //under review
+}*/
+/*function tags_edit($entry_id, $tag_id){
+include "connection.php";
+$sql = "SELECT entry_id, tag_id FROM tags_to_entries
+LEFT JOIN tags_to_entries ON entries_id = tags_to_entries.entry_id
+LEFT JOIN tags ON tags_to_entries.tag_id = tags_id";
+
+if ($entry_id && $tag_id != $tags_id || !isset($entry_id)) {
+      $sql = 'INSERT INTO tags_to_entries (entry_id, tag_id) VALUES (?, ?)';
+    } else {
+      $results = $db->prepare($sql);
+    }
+
+       try {
+           $results = $db->prepare($sql);
+           $results->bindValue(1, $entry_id, PDO::PARAM_INT);
+           $results->bindValue(2, $tag_id, PDO::PARAM_INT);
+         }
+         $results->execute();
+       } catch (Exception $e) {
+           echo "Error!: " . $e->getMessage() . "<br />";
+           return false;
+         }
+       return true;
+       //under review
+}*/
+
+function delete_entry($entries_id) {
+//delete entry
     include 'connection.php';
-    $sql = 'DELETE FROM entries WHERE id = ?';
+    $sql = 'DELETE FROM entries WHERE entries_id = ?';
     try {
         $results = $db->prepare($sql);
-        $results->bindValue(1, $id, PDO::PARAM_INT);
+        $results->bindValue(1, $entries_id, PDO::PARAM_INT);
         $results->execute();
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage() . "<br>";

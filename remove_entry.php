@@ -29,13 +29,12 @@
 <?php
 
 require 'inc/functions.php';
-$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 $page = 'Remove Entry';
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+if (!empty($_GET['id'])){
+  $entries_id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
   include 'inc/header.php';
 }
-if (delete_entry($id)) {
+if (delete_entry($entries_id)) {
   echo 'Delete, successful. You will be redirected automatically or  by clicking link below.</ br>
   <p><a href="index.php?id=<?php echo $id; ?>">Home</a></p>';
   header('refresh: 5; url = index.php');

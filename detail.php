@@ -1,9 +1,13 @@
 <?php
 require 'inc/functions.php';
-$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-if(isset($_GET['id'])){
-  $entry = get_detail_page($id);
+if(!empty($_GET['id'])){
+$entries_id =filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+
+  if(!empty($entries_id)){
+list($entries_id, $title, $date, $time_spent, $learned, $resources) = get_entries_list($entries_id);
+   }
 }
+
 include 'inc/header.php'; ?>
 <html>
     <head>
@@ -46,8 +50,8 @@ include 'inc/header.php'; ?>
                 <div class="entry-list single">
                     <article>
 
-                      <h2><?php echo $entry['title']; ?></h2>
-                      <time><?php echo date('F jS,Y',strtotime($entry['date'])); ?></time>
+                      <h2><?php echo $title; ?></h2>
+                      <time><?php echo date('F jS,Y',strtotime($date)); ?></time>
 
 
                       <!--<h1>The best day I’ve ever had</h1>
@@ -57,16 +61,16 @@ include 'inc/header.php'; ?>
                             <p>15 Hours</p>
                         </div>
                         <div class="entry">-->
-                            <h3 style= "text-align:left;">Time Spent:<?php echo "<time> " . $entry['time_spent'] . "</time>"; ?></h3>
+                            <h3 style= "text-align:left;">Time Spent:<?php echo "<time> " . $time_spent . "</time>"; ?></h3>
                             <h3 style= "text-align:left;">What I Learned:</h3>
-                            <p class="entry"><?php echo $entry['learned']; ?></p>
+                            <p class="entry"><?php echo $learned; ?></p>
 
                         </div>
                         <div class="entry">
                             <h3>Resources to Remember:</h3>
-                            <?php if (!empty($entry['resources'])) {
+                            <?php if (!empty($resources)) {
                 echo "<ul>";
-                foreach (explode(trim(','), $entry['resources']) as $resource) {
+                foreach (explode(trim(','), $resources) as $resource) {
                     echo "<li>" . trim($resource) . "</ br></li>";
                 }
                 echo "</ul>";
@@ -74,25 +78,27 @@ include 'inc/header.php'; ?>
               ?>
                         </div>
                         <div class="entry">
-                            <h3>Tags:</h3>
-                            <?php if (!empty($entry['tags'])) {
-                //echo "<ul>";
-                foreach (explode(trim(','), $entry['tags']) as $tag) {
-                  echo "<a href='tags.php?tag=" . trim($tag) . "'class='button-tag'>#" . trim($tag) . "</a> ";
+                          <!--  <h3>Tags:</h3>-->
+                <?php
+                /*echo "<ul>";
+              if($tags = add_tag(null,$entries_id)) {
+                foreach ($tags as $tag) {
+                  echo "<a href='tags.php?tag_id=" . $tag['tags_id'] . "'class='button-tag'>#" . $tag['tag'] . "</a> ";
                   //echo "<input type='hidden' name='" . trim($tag) . "' id='" . trim($tag) . "' />";
                   //echo "<input type='submit' class= 'button-tag' value= '" . trim($tag) . "' />";
                   echo "&nbsp";
                 //echo "</ul>";
               }
-            }
+            }*/
+
               ?>
                         </div>
                     </article>
                 </div>
             </div>
             <div class="edit">
-                <p><a href="edit.php?id=<?php echo $id; ?>">Edit Entry</a>
-                <a href="delete.php?id=<?php echo $id; ?>"style='color:#f5671b'>Delete</a></p>
+                <p><a href="edit.php?id=<?php echo $entries_id; ?>">Edit Entry</a>
+                <a href="remove_entry.php?id=<?php echo $entries_id; ?>"style='color:#f5671b'>Delete</a></p>
             </div>
         </section>
         <?php include 'inc/footer.php'; ?>
